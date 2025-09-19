@@ -51,13 +51,13 @@ class RigidRegistration(EMRegistration):
                 'The scale factor must be a positive number. Instead got: {}.'.format(s))
 
         self.R = th.eye(self.D, dtype=th.float64).float().to(self.device) if R is None else R
-        if type(self.R) is not th.Tensor:
+        if not isinstance(self.R, th.Tensor):
             self.R = th.tensor(self.R, dtype=th.float64).float().to(self.device)
         self.t = th.atleast_2d(th.zeros((1, self.D), dtype=th.float64)).float().to(self.device) if t is None else t
-        if type(self.t) is not th.Tensor:
+        if not isinstance(self.t, th.Tensor):
             self.t = th.tensor(self.t, dtype=th.float64).float().to(self.device)
         self.s = th.tensor(1, dtype=th.float64).float().to(self.device) if s is None else s
-        if type(self.s) is not th.Tensor:
+        if not isinstance(self.s, th.Tensor):
             self.s = th.tensor(self.s, dtype=th.float64).float().to(self.device)
         self.scale = scale
 

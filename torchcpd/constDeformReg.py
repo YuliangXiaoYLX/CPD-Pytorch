@@ -28,16 +28,16 @@ class ConstrainedDeformableRegistration(DeformableRegistration):
             raise ValueError(
                 "Expected a positive value for regularization parameter e_alpha. Instead got: {}".format(e_alpha))
         
-        if type(source_id) is not np.ndarray or source_id.ndim != 1:
+        if not isinstance(source_id, np.ndarray) or source_id.ndim != 1:
             raise ValueError(
                 "The source ids (source_id) must be a 1D numpy array of ints.")
         
-        if type(target_id) is not np.ndarray or target_id.ndim != 1:
+        if not isinstance(target_id, np.ndarray) or target_id.ndim != 1:
             raise ValueError(
                 "The target ids (target_id) must be a 1D numpy array of ints.")
 
         self.e_alpha = th.tensor(1e-8, dtype=th.float64).float().to(self.device) if e_alpha is None else e_alpha
-        if type(self.e_alpha) is not th.Tensor:
+        if not isinstance(self.e_alpha, th.Tensor):
             self.e_alpha = th.tensor(self.e_alpha, dtype=th.float64).float().to(self.device)
         self.source_id = th.tensor(source_id, dtype=th.int64).to(self.device)
         self.target_id = th.tensor(target_id, dtype=th.int64).to(self.device)

@@ -76,11 +76,11 @@ class EMRegistration(object):
     """
 
     def __init__(self, X, Y, device, sigma2=None, max_iterations=None, tolerance=None, w=None, *args, **kwargs):
-        if type(X) is not np.ndarray or X.ndim != 2:
+        if not isinstance(X, np.ndarray) or X.ndim != 2:
             raise ValueError(
                 "The target point cloud (X) must be at a 2D tensor array.")
 
-        if type(Y) is not np.ndarray or Y.ndim != 2:
+        if not isinstance(Y, np.ndarray) or Y.ndim != 2:
             raise ValueError(
                 "The source point cloud (Y) must be a 2D numpy array.")
 
@@ -112,15 +112,15 @@ class EMRegistration(object):
         self.Y = th.tensor(Y, dtype=th.float64).float().to(self.device)
         self.TY = th.tensor(Y, dtype=th.float64).float().to(self.device)
         self.sigma2 = initialize_sigma2(self.X, self.Y) if sigma2 is None else sigma2
-        if type(self.sigma2) is not th.Tensor:
+        if not isinstance(self.sigma2, th.Tensor):
             self.sigma2 = th.tensor(self.sigma2, dtype=th.float64).float().to(self.device)
         (self.N, self.D) = self.X.shape
         (self.M, _) = self.Y.shape
         self.tolerance = th.tensor(0.001, dtype=th.float64).float().to(self.device) if tolerance is None else tolerance
-        if type(self.tolerance) is not th.Tensor:
+        if not isinstance(self.tolerance, th.Tensor):
             self.tolerance = th.tensor(self.tolerance, dtype=th.float64).float().to(self.device)
         self.w = th.tensor(0.0, dtype=th.float64).float().to(self.device) if w is None else w
-        if type(self.w) is not th.Tensor:
+        if not isinstance(self.w, th.Tensor):
             self.w = th.tensor(self.w, dtype=th.float64).float().to(self.device)
         self.max_iterations = 100 if max_iterations is None else max_iterations
         self.iteration = 0
