@@ -75,7 +75,7 @@ class EMRegistration(object):
         The sum of all elements in P.
     """
 
-    def __init__(self, X, Y, device, sigma2=None, max_iterations=None, tolerance=None, w=None, *args, **kwargs):
+    def __init__(self, X, Y, device, sigma2=None, max_iterations=None, tolerance=None, w=None, dtype=th.float64, *args, **kwargs):
         if not isinstance(X, np.ndarray) or X.ndim != 2:
             raise ValueError(
                 "The target point cloud (X) must be at a 2D tensor array.")
@@ -108,29 +108,30 @@ class EMRegistration(object):
                 "Expected a value between 0 (inclusive) and 1 (exclusive) for w instead got: {}".format(w))
 
         self.device = th.device(device)
-        self.X = th.tensor(X, dtype=th.float64).float().to(self.device)
-        self.Y = th.tensor(Y, dtype=th.float64).float().to(self.device)
-        self.TY = th.tensor(Y, dtype=th.float64).float().to(self.device)
+        self.dtype = dtype
+        self.X = th.tensor(X, dtype=dtype).to(self.device)
+        self.Y = th.tensor(Y, dtype=dtype).to(self.device)
+        self.TY = th.tensor(Y, dtype=dtype).to(self.device)
         self.sigma2 = initialize_sigma2(self.X, self.Y) if sigma2 is None else sigma2
         if not isinstance(self.sigma2, th.Tensor):
-            self.sigma2 = th.tensor(self.sigma2, dtype=th.float64).float().to(self.device)
+            self.sigma2 = th.tensor(self.sigma2, dtype=dtype).to(self.device)
         (self.N, self.D) = self.X.shape
         (self.M, _) = self.Y.shape
-        self.tolerance = th.tensor(0.001, dtype=th.float64).float().to(self.device) if tolerance is None else tolerance
+        self.tolerance = th.tensor(0.001, dtype=dtype).to(self.device) if tolerance is None else tolerance
         if not isinstance(self.tolerance, th.Tensor):
-            self.tolerance = th.tensor(self.tolerance, dtype=th.float64).float().to(self.device)
-        self.w = th.tensor(0.0, dtype=th.float64).float().to(self.device) if w is None else w
+            self.tolerance = th.tensor(self.tolerance, dtype=dtype).to(self.device)
+        self.w = th.tensor(0.0, dtype=dtype).to(self.device) if w is None else w
         if not isinstance(self.w, th.Tensor):
-            self.w = th.tensor(self.w, dtype=th.float64).float().to(self.device)
+            self.w = th.tensor(self.w, dtype=dtype).to(self.device)
         self.max_iterations = 100 if max_iterations is None else max_iterations
         self.iteration = 0
-        self.diff = th.tensor(np.inf, dtype=th.float64).float().to(self.device)
-        self.q = th.tensor(np.inf, dtype=th.float64).float().to(self.device)
-        self.P = th.zeros((self.M, self.N), dtype=th.float64).to(self.device)
-        self.Pt1 = th.zeros((self.N, 1), dtype=th.float64).to(self.device)
-        self.P1 = th.zeros((self.M, 1), dtype=th.float64).to(self.device)
-        self.PX = th.zeros((self.M, self.D), dtype=th.float64).to(self.device)
-        self.Np = th.tensor(0., dtype=th.float64).float().to(self.device)
+        self.diff = th.tensor(np.inf, dtype=dtype).to(self.device)
+        self.q = th.tensor(np.inf, dtype=dtype).to(self.device)
+        self.P = th.zeros((self.M, self.N), dtype=dtype).to(self.device)
+        self.Pt1 = th.zeros((self.N, 1), dtype=dtype).to(self.device)
+        self.P1 = th.zeros((self.M, 1), dtype=dtype).to(self.device)
+        self.PX = th.zeros((self.M, self.D), dtype=dtype).to(self.device)
+        self.Np = th.tensor(0., dtype=dtype).to(self.device)
 
     def register(self, callback=lambda **kwargs: None):
         """
@@ -201,7 +202,7 @@ class EMRegistration(object):
         """
         P = th.sum(th.pow(self.X[None, :, :] - self.TY[:, None, :], 2), dim=2) # (M, N)
         P = th.exp(th.div(-P, (2.*self.sigma2)))
-        c = th.pow(2.*th.tensor(math.pi, dtype=th.float64)*self.sigma2, (self.D/2.))*self.w/(1. - self.w)*self.M/self.N
+        c = th.pow(2.*th.tensor(math.pi, dtype=self.dtype)*self.sigma2, (self.D/2.))*self.w/(1. - self.w)*self.M/self.N
 
         den = th.sum(P, dim = 0, keepdims = True) # (1, N)
         den = th.clamp(den, th.finfo(self.X.dtype).eps, None) + c
