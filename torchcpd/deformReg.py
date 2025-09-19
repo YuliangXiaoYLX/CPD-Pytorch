@@ -34,9 +34,9 @@ class DeformableRegistration(EMRegistration):
 
         self.alpha = 2 if alpha is None else alpha
         self.beta = 2 if beta is None else beta
-        self.alpha = th.tensor(self.alpha, dtype=th.float64).float().to(self.device)
-        self.beta = th.tensor(self.beta, dtype=th.float64).float().to(self.device)
-        self.W = th.zeros((self.M, self.D), dtype=th.float64).float().to(self.device)
+        self.alpha = th.tensor(self.alpha, dtype=self.dtype).to(self.device)
+        self.beta = th.tensor(self.beta, dtype=self.dtype).to(self.device)
+        self.W = th.zeros((self.M, self.D), dtype=self.dtype).to(self.device)
         self.G = gaussian_kernel(self.Y, self.beta).to(self.device)
         self.num_eig = th.tensor(num_eig, dtype=th.int64).to(self.device)
         self.low_rank = low_rank
@@ -44,7 +44,7 @@ class DeformableRegistration(EMRegistration):
             self.Q, self.S = low_rank_eigen(self.G, self.num_eig)
             self.inv_S = th.diag(th.div(1., self.S))
             self.S = th.diag(self.S)
-            self.E = th.tensor(0., dtype=th.float64).float().to(self.device)
+            self.E = th.tensor(0., dtype=self.dtype).to(self.device)
 
     def update_transform(self):
         """
@@ -53,7 +53,7 @@ class DeformableRegistration(EMRegistration):
         """
         if self.low_rank is False:
             A = th.mm(th.diag(self.P1.reshape(-1, )), self.G) + \
-                self.alpha * self.sigma2 * th.eye(self.M, dtype=th.float64).float().to(self.device)
+                self.alpha * self.sigma2 * th.eye(self.M, dtype=self.dtype).to(self.device)
             B = self.PX - th.mm(th.diag(self.P1.reshape(-1, )), self.Y)
             self.W = th.linalg.solve(A, B)
         else:
@@ -106,7 +106,7 @@ class DeformableRegistration(EMRegistration):
         # The original CPD paper does not explicitly calculate the objective functional.
         # This functional will include terms from both the negative log-likelihood and
         # the Gaussian kernel used for regularization.
-        self.q = th.tensor(np.inf, dtype=th.float64).float().to(self.device)
+        self.q = th.tensor(np.inf, dtype=self.dtype).to(self.device)
         xPx = th.mm(self.Pt1.permute(1, 0), th.sum(th.mul(self.X, self.X), dim=1).reshape(-1, 1))
         yPy = th.mm(self.P1.permute(1, 0), th.sum(th.mul(self.TY, self.TY), dim=1).reshape(-1, 1))
         trPXY = th.sum(th.mul(self.TY, self.PX))

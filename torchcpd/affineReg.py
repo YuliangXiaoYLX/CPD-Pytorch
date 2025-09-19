@@ -35,12 +35,12 @@ class AffineRegistration(EMRegistration):
             raise ValueError(
                 'The translation vector can only be initialized to 1x{} positive semi definite matrices. Instead got: {}.'.format(self.D, t))
         
-        self.B = th.eye(self.D, dtype=th.float64).float().to(self.device) if B is None else B
-        if type(self.B) is not th.Tensor:
-            self.B = th.tensor(self.B, dtype=th.float64).float().to(self.device)
-        self.t = th.atleast_2d(th.zeros((1, self.D), dtype=th.float64)).float().to(self.device) if t is None else t
-        if type(self.t) is not th.Tensor:
-            self.t = th.tensor(self.t, dtype=th.float64).float().to(self.device)
+        self.B = th.eye(self.D, dtype=self.dtype).to(self.device) if B is None else B
+        if not isinstance(self.B, th.Tensor):
+            self.B = th.tensor(self.B, dtype=self.dtype).to(self.device)
+        self.t = th.atleast_2d(th.zeros((1, self.D), dtype=self.dtype)).to(self.device) if t is None else t
+        if not isinstance(self.t, th.Tensor):
+            self.t = th.tensor(self.t, dtype=self.dtype).to(self.device)
         self.YPY = None
         self.X_hat = None
         self.A = None
