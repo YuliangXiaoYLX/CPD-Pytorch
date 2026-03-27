@@ -43,17 +43,15 @@ plt.show()
 ```
 **More tutorials can be found in the ```/examples``` folder.**
 
-# Star History
+## Star History
 
-<p align="center">
-  <a href="https://star-history.com/#mikami520/CPD-Pytorch&Date">
-   <picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=mikami520/CPD-Pytorch&type=Date&theme=dark" />
-     <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=mikami520/CPD-Pytorch&type=Date" />
-     <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=mikami520/CPD-Pytorch&type=Date" />
-   </picture>
-  </a>
-</p>
+<a href="https://www.star-history.com/?repos=YuliangXiaoYLX%2FCPD-Pytorch&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=YuliangXiaoYLX/CPD-Pytorch&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=YuliangXiaoYLX/CPD-Pytorch&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=YuliangXiaoYLX/CPD-Pytorch&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ---
 <div align="center">
