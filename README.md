@@ -14,7 +14,7 @@ Coherent Point Drift Implementation in pytorch version
 
 # Installation
 ```bash
-git clone https://github.com/mikami520/CPD-Pytorch.git
+git clone https://github.com/YuliangXiaoYLX/CPD-Pytorch.git
 cd CPD-Pytorch
 pip install -e .
 ```
