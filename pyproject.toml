@@ -1,0 +1,191 @@
+[build-system]
+requires = ["hatchling>=1.27", "hatch-fancy-pypi-readme>=24.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cpd-pytorch"
+dynamic = ["version", "readme"]
+description = "Coherent Point Drift (CPD) point set registration in PyTorch: rigid, affine and deformable, on CPU or GPU."
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.8"
+authors = [{ name = "Yuliang (Chris) Xiao", email = "yl.xiao@mail.utoronto.ca" }]
+keywords = [
+  "coherent point drift",
+  "cpd",
+  "point cloud",
+  "point set registration",
+  "non-rigid registration",
+  "pytorch",
+  "gpu",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Image Recognition",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Typing :: Typed",
+]
+dependencies = [
+  "numpy>=1.21",
+  "torch>=1.10",
+]
+
+[project.optional-dependencies]
+examples = ["matplotlib>=3.3"]
+
+[project.urls]
+Homepage = "https://github.com/YuliangXiaoYLX/CPD-Pytorch"
+Documentation = "https://cpd-pytorch.readthedocs.io/"
+Source = "https://github.com/YuliangXiaoYLX/CPD-Pytorch"
+Issues = "https://github.com/YuliangXiaoYLX/CPD-Pytorch/issues"
+Changelog = "https://github.com/YuliangXiaoYLX/CPD-Pytorch/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+test = [
+  "pytest>=7",
+  "pytest-cov>=4",
+  # Reference implementation for the parity tests: pycpd master (newer than PyPI 2.0.0).
+  "pycpd @ https://github.com/siavashk/pycpd/archive/e5ca02d2501fb4b633c1664de939c336ffa2349e.tar.gz",
+  "matplotlib>=3.3",
+]
+docs = [
+  "mkdocs>=1.6,<2",  # MkDocs 2 drops the plugin system that mkdocstrings needs
+  "mkdocs-material>=9.5",
+  "mkdocstrings[python]>=0.26",
+]
+lint = [
+  "ruff>=0.6",
+  "mypy>=1.10",
+]
+dev = [
+  { include-group = "test" },
+  { include-group = "docs" },
+  { include-group = "lint" },
+  "pre-commit>=3",
+]
+
+[tool.hatch.version]
+path = "src/cpd_pytorch/_version.py"
+
+# The README uses repository-relative images and links, which work on GitHub and in
+# local previews. PyPI renders the README outside the repository, so rewrite them to
+# absolute URLs for the package metadata.
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]  # in-page navigation links
+pattern = 'href="#([^"]+)"'
+replacement = 'href="https://github.com/YuliangXiaoYLX/CPD-Pytorch#\1"'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]  # HTML links to repository files
+pattern = 'href="(?!https?://|#)([^"]+)"'
+replacement = 'href="https://github.com/YuliangXiaoYLX/CPD-Pytorch/blob/main/\1"'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]  # HTML images
+pattern = 'src="(?!https?://)([^"]+)"'
+replacement = 'src="https://raw.githubusercontent.com/YuliangXiaoYLX/CPD-Pytorch/main/\1"'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(!\[[^\]]*\])\((?!https?://)([^)]+)\)'
+replacement = '\1(https://raw.githubusercontent.com/YuliangXiaoYLX/CPD-Pytorch/main/\2)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(\[[^\]]*\])\((?!https?://|#)([^)]+)\)'
+replacement = '\1(https://github.com/YuliangXiaoYLX/CPD-Pytorch/blob/main/\2)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]  # links around badges
+pattern = '(\)\])\((?!https?://|#)([^)]+)\)'
+replacement = '\1(https://github.com/YuliangXiaoYLX/CPD-Pytorch/blob/main/\2)'
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github", "/.pre-commit-config.yaml", "/docs/assets"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cpd_pytorch"]
+
+
+[tool.pytest.ini_options]
+minversion = "7"
+addopts = ["-ra", "--strict-markers", "--strict-config", "--doctest-modules"]
+xfail_strict = true
+testpaths = ["tests", "src/cpd_pytorch"]
+filterwarnings = [
+  "error",
+  # Old torch/numpy combinations emit these at import time; they are not ours.
+  "ignore::DeprecationWarning:torch.*",
+  "ignore:.*is deprecated.*:DeprecationWarning:pycpd.*",
+  "ignore:Failed to initialize NumPy:UserWarning",
+]
+markers = [
+  "slow: long-running tests (deselect with '-m \"not slow\"')",
+]
+
+[tool.coverage.run]
+source = ["cpd_pytorch"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError"]
+
+
+[tool.ruff]
+target-version = "py38"
+line-length = 100
+src = ["src", "tests", "examples", "benchmarks"]
+
+[tool.ruff.lint]
+extend-select = [
+  "E", "W", # pycodestyle, including line length
+  "B",    # flake8-bugbear
+  "C4",   # flake8-comprehensions
+  "D",    # pydocstyle
+  "I",    # isort
+  "NPY",  # numpy-specific rules
+  "PT",   # flake8-pytest-style
+  "RET",  # flake8-return
+  "RUF",  # ruff-specific rules
+  "SIM",  # flake8-simplify
+  "UP",   # pyupgrade
+]
+ignore = [
+  "D105",   # magic methods need no docstring
+  "D107",   # __init__ is documented in the class docstring
+  "RUF002", # docstrings use math symbols such as σ and ×
+  "RUF003", # comments use math symbols such as σ and ×
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "PT018"]
+"examples/**" = ["D103", "RUF059"]  # unpacking shows the return values
+"benchmarks/**" = ["D103"]
+
+
+[tool.mypy]
+files = ["src"]
+strict = true
+warn_unreachable = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+
+[[tool.mypy.overrides]]
+module = ["pycpd.*"]
+ignore_missing_imports = true
