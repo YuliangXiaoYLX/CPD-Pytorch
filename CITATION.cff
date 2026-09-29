@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, please cite it, together with the Coherent Point Drift paper
+  by Myronenko and Song listed below.
+title: "CPD-PyTorch: Coherent Point Drift point set registration in PyTorch"
+type: software
+authors:
+  - family-names: Xiao
+    given-names: Yuliang
+    email: yl.xiao@mail.utoronto.ca
+    affiliation: University of Toronto
+version: 1.0.0
+license: Apache-2.0
+repository-code: "https://github.com/YuliangXiaoYLX/CPD-Pytorch"
+url: "https://cpd-pytorch.readthedocs.io/"
+keywords:
+  - coherent point drift
+  - point set registration
+  - non-rigid registration
+  - pytorch
+references:
+  - type: article
+    authors:
+      - family-names: Myronenko
+        given-names: Andriy
+      - family-names: Song
+        given-names: Xubo
+    title: "Point Set Registration: Coherent Point Drift"
+    journal: IEEE Transactions on Pattern Analysis and Machine Intelligence
+    volume: 32
+    issue: 12
+    start: 2262
+    end: 2275
+    year: 2010
+    doi: 10.1109/TPAMI.2010.46

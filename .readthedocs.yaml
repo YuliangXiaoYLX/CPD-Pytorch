@@ -1,0 +1,18 @@
+# Read the Docs builds the documentation on every push to main ("latest") and for every
+# release tag ("stable" and the version). See "Documentation" in CONTRIBUTING.md.
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.12"
+  jobs:
+    post_install:
+      # The docs dependency group from pyproject.toml; the site is built from the source
+      # without importing the package, so PyTorch is not installed.
+      - pip install --upgrade "pip>=25.1"
+      - pip install --group docs
+
+mkdocs:
+  configuration: mkdocs.yml
+  fail_on_warning: true

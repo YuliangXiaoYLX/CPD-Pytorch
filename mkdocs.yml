@@ -1,0 +1,88 @@
+site_name: CPD-PyTorch
+site_description: Coherent Point Drift point set registration in PyTorch
+site_url: !ENV [READTHEDOCS_CANONICAL_URL, "https://cpd-pytorch.readthedocs.io/en/latest/"]
+repo_url: https://github.com/YuliangXiaoYLX/CPD-Pytorch
+repo_name: YuliangXiaoYLX/CPD-Pytorch
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; 2024-2026 Yuliang (Chris) Xiao · Apache License 2.0
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - navigation.footer
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - User guide:
+      - Registration methods: guide/methods.md
+      - Choosing parameters: guide/parameters.md
+      - Devices, precision and array types: guide/devices.md
+      - Batched registration: guide/batching.md
+      - Large point sets: guide/large.md
+  - Examples: examples.md
+  - API reference: api.md
+  - Benchmarks: benchmarks.md
+  - Migration guide: migration.md
+  - Changelog: changelog.md
+  - Contributing: contributing.md
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: numpy
+            docstring_section_style: list
+            filters: ["!^_"]
+            heading_level: 2
+            members_order: source
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_full_path: false
+            show_root_heading: true
+            show_signature_annotations: true
+            show_source: false
+            signature_crossrefs: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+  - pymdownx.superfences
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
