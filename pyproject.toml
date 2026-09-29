@@ -134,6 +134,8 @@ filterwarnings = [
   # PyTorch 1.x imports pkg_resources, which warns about installed namespace packages.
   "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
   "ignore:Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning",
+  # NumPy 2.0-2.2 with Apple's Accelerate raises these falsely in matrix products (pycpd, tests).
+  "ignore:(divide by zero|overflow|invalid value) encountered in matmul:RuntimeWarning",
 ]
 markers = [
   "slow: long-running tests (deselect with '-m \"not slow\"')",
