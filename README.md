@@ -72,7 +72,7 @@ computation for point sets of 100,000 points.
   E-step that fits 100,000-point sets in under 1 GB, a faster low-rank solver,
   normalization, correspondences, results verified against pycpd, and documentation on
   Read the Docs. See the [changelog](CHANGELOG.md) and the
-  [migration guide](https://cpd-pytorch.readthedocs.io/en/latest/migration/).
+  [migration guide](https://cpd-pytorch.readthedocs.io/en/stable/migration/).
 - **2024-03 — torchcpd 0.0.1.** The first installable release: a PyTorch port of pycpd
   (started in February 2023) with rigid, affine, deformable (including low-rank) and
   constrained deformable registration on the GPU.
@@ -170,7 +170,7 @@ The options you are most likely to need:
 
 Time per EM iteration for random 3D point sets of `N = M` points, after a warm-up and
 including the setup of each registration; memory in parentheses. The
-[benchmarks page](https://cpd-pytorch.readthedocs.io/en/latest/benchmarks/) has all results, including float64 on
+[benchmarks page](https://cpd-pytorch.readthedocs.io/en/stable/benchmarks/) has all results, including float64 on
 the GPU, the CPU up to 100,000 points and Apple GPUs.
 
 NVIDIA RTX 3090, float32 (peak GPU memory):
@@ -207,7 +207,7 @@ python examples/fish_deformable_2D.py --device cpu
 ## Documentation
 
 The [documentation](https://cpd-pytorch.readthedocs.io/) has a user guide (methods, parameters, devices, batching,
-large point sets), the API reference and a [migration guide](https://cpd-pytorch.readthedocs.io/en/latest/migration/)
+large point sets), the API reference and a [migration guide](https://cpd-pytorch.readthedocs.io/en/stable/migration/)
 for users of pycpd and of `torchcpd` 0.0.x.
 
 ## Citation

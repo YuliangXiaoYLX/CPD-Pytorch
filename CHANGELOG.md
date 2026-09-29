@@ -7,7 +7,7 @@ All notable changes to this project are documented here. The format follows
 ## [1.0.0] - 2026-09-29
 
 First release on PyPI. The code was rewritten; see the
-[migration guide](https://cpd-pytorch.readthedocs.io/en/latest/migration/) for the details.
+[migration guide](https://cpd-pytorch.readthedocs.io/en/stable/migration/) for the details.
 
 ### Changed (breaking)
 
