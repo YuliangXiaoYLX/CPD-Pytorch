@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # weekly, to catch breakage from new PyTorch/NumPy releases
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FORCE_COLOR: "1"
+  # CPU-only PyTorch wheels: small downloads, same code paths as the CUDA builds.
+  TORCH_INDEX: https://download.pytorch.org/whl/cpu
+
+jobs:
+  lint:
+    name: Lint and type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          uv venv
+          uv pip install torch --index-url "$TORCH_INDEX"
+          uv pip install -e . --group lint
+      - run: uv run --no-sync ruff check --output-format=github .
+      - run: uv run --no-sync ruff format --check .
+      - run: uv run --no-sync mypy
+
+  tests:
+    name: ${{ matrix.os }} · Python ${{ matrix.python }}${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        include:
+          # Oldest supported stack. PyTorch 1.x imports pkg_resources (setuptools < 70).
+          - os: ubuntu-latest
+            python: "3.8"
+            label: " · oldest dependencies"
+            torch: "torch==1.10.2"
+            extra: "numpy==1.21.6 'setuptools<70'"
+          - os: macos-latest
+            python: "3.12"
+          - os: windows-latest
+            python: "3.12"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install
+        shell: bash
+        run: |
+          uv venv
+          uv pip install "${{ matrix.torch || 'torch' }}" --index-url "$TORCH_INDEX"
+          uv pip install -e . --group test ${{ matrix.extra }}
+          uv pip list
+      - name: Test
+        run: uv run --no-sync pytest --cov --cov-report=term --durations=10
+
+  build:
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+      - run: uv build
+      - run: uvx twine check --strict dist/*
+      - name: Install and import the wheel
+        run: |
+          uv venv
+          uv pip install dist/*.whl --index-url "$TORCH_INDEX" --extra-index-url https://pypi.org/simple
+          uv run --no-sync python -c "import cpd_pytorch; print(cpd_pytorch.__version__)"

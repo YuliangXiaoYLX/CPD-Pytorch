@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: What you did, what you expected and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal example
+      description: >-
+        A short script that reproduces the problem, ideally with
+        `cpd_pytorch.datasets.load_fish()` or random data.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: traceback
+    attributes:
+      label: Error message
+      description: The full traceback, if any.
+      render: text
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Paste the output of the command below.
+      value: |
+        python -c "import cpd_pytorch, torch, numpy, platform; print(cpd_pytorch.__version__, torch.__version__, numpy.__version__, platform.platform(), torch.cuda.is_available())"
+      render: text
+    validations:
+      required: true

@@ -1,0 +1,31 @@
+name: Docs
+
+# Checks that the MkDocs site builds in strict mode (broken links, missing pages and invalid
+# docstrings fail). Read the Docs builds and hosts the published site; see .readthedocs.yaml.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.12"
+      # mkdocstrings reads the source statically, so PyTorch is not needed here.
+      - run: >-
+          uv run --no-project --with "mkdocs>=1.6,<2" --with "mkdocs-material>=9.5"
+          --with "mkdocstrings[python]>=0.26"
+          mkdocs build --strict
