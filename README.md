@@ -12,8 +12,8 @@
 
 <p align="center">
   <a href="https://cpd-pytorch.readthedocs.io/"><img src="https://img.shields.io/readthedocs/cpd-pytorch?logo=readthedocs&logoColor=white" alt="Documentation"></a>
-  <a href="https://pypi.org/project/cpd-pytorch/"><img src="https://img.shields.io/pypi/v/cpd-pytorch?logo=pypi&logoColor=white" alt="PyPI"></a>
-  <a href="https://pypi.org/project/cpd-pytorch/"><img src="https://img.shields.io/pypi/pyversions/cpd-pytorch?logo=python&logoColor=white" alt="Python versions"></a>
+  <a href="https://pypi.org/project/cpd-pytorch/"><img src="https://img.shields.io/pypi/v/cpd-pytorch.svg?logo=pypi&logoColor=white" alt="PyPI"></a>
+  <a href="https://pypi.org/project/cpd-pytorch/"><img src="https://img.shields.io/pypi/pyversions/cpd-pytorch.svg?logo=python&logoColor=white" alt="Python versions"></a>
   <a href="https://github.com/YuliangXiaoYLX/CPD-Pytorch/actions/workflows/ci.yml"><img src="https://github.com/YuliangXiaoYLX/CPD-Pytorch/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://colab.research.google.com/github/YuliangXiaoYLX/CPD-Pytorch/blob/main/examples/quickstart.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue" alt="License"></a>
