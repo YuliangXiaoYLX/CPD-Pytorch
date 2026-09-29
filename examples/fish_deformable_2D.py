@@ -1,38 +1,20 @@
-from functools import partial
-import matplotlib.pyplot as plt
-from torchcpd import DeformableRegistration
-import numpy as np
-import time
-import torch as th
+"""Deformable (non-rigid) registration of two different 2D fish."""
 
-
-def visualize(iteration, error, X, Y, ax):
-    plt.cla()
-    X = X.detach().cpu().numpy()
-    Y = Y.detach().cpu().numpy()
-    th.Tensor.ndim = property(lambda self: len(self.shape))  # Fix it
-    ax.scatter(X[:, 0],  X[:, 1], color='red', label='Target')
-    ax.scatter(Y[:, 0],  Y[:, 1], color='blue', label='Source')
-    plt.text(0.87, 0.92, 'Iteration: {:d}'.format(
-        iteration), horizontalalignment='center', verticalalignment='center', transform=ax.transAxes, fontsize='x-large')
-    ax.legend(loc='upper left', fontsize='x-large')
-    plt.draw()
-    plt.pause(0.001)
+from _plot import Animator, parse_args
+from cpd_pytorch import DeformableRegistration, datasets
 
 
 def main():
-    device = 'cuda:0' if th.cuda.is_available() else 'cpu'
-    X = np.loadtxt('../data/fish_target.txt')
-    Y = np.loadtxt('../data/fish_source.txt')
+    args = parse_args(__doc__)
+    X, Y = datasets.load_fish()
 
-    fig = plt.figure()
-    fig.add_axes([0, 0, 1, 1])
-    callback = partial(visualize, ax=fig.axes[0])
-
-    reg = DeformableRegistration(**{'X': X, 'Y': Y, 'device': device})
-    reg.register(callback)
-    plt.show()
+    animate = Animator(args, X, Y, title="deformable")
+    # alpha: smoothness (larger = stiffer); beta: kernel width in data units.
+    reg = DeformableRegistration(X, Y, alpha=2.0, beta=2.0, device=args.device, dtype=args.dtype)
+    TY, (G, W) = reg.register(callback=animate)
+    print(f"{reg.iteration} iterations, sigma2 = {float(reg.sigma2):.3e}")
+    animate.finish()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

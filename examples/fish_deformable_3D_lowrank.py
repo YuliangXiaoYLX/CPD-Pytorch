@@ -1,48 +1,27 @@
-from functools import partial
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from torchcpd import DeformableRegistration
-import numpy as np
-import torch as th
+"""Low-rank deformable registration: approximates the kernel by its leading eigenpairs."""
 
-def visualize(iteration, error, X, Y, ax):
-    plt.cla()
-    X = X.detach().cpu().numpy()
-    Y = Y.detach().cpu().numpy()
-    th.Tensor.ndim = property(lambda self: len(self.shape))  # Fix it
-    ax.scatter(X[:, 0],  X[:, 1], X[:, 2], color='red', label='Target')
-    ax.scatter(Y[:, 0],  Y[:, 1], Y[:, 2], color='blue', label='Source')
-    ax.text2D(0.87, 0.92, 'Iteration: {:d}'.format(
-        iteration), horizontalalignment='center', verticalalignment='center', transform=ax.transAxes, fontsize='x-large')
-    ax.legend(loc='upper left', fontsize='x-large')
-    plt.draw()
-    plt.pause(0.001)
+import numpy as np
+
+from _plot import Animator, parse_args
+from cpd_pytorch import DeformableRegistration, datasets
+
+
+def lift_to_3d(points):
+    return np.vstack([np.c_[points, np.zeros(len(points))], np.c_[points, np.ones(len(points))]])
 
 
 def main():
-    device = 'cuda:0' if th.cuda.is_available() else 'cpu'
-    fish_target = np.loadtxt('../data/fish_target.txt')
-    X1 = np.zeros((fish_target.shape[0], fish_target.shape[1] + 1))
-    X1[:, :-1] = fish_target
-    X2 = np.ones((fish_target.shape[0], fish_target.shape[1] + 1))
-    X2[:, :-1] = fish_target
-    X = np.vstack((X1, X2))
+    args = parse_args(__doc__)
+    X, Y = (lift_to_3d(points) for points in datasets.load_fish())
 
-    fish_source = np.loadtxt('../data/fish_source.txt')
-    Y1 = np.zeros((fish_source.shape[0], fish_source.shape[1] + 1))
-    Y1[:, :-1] = fish_source
-    Y2 = np.ones((fish_source.shape[0], fish_source.shape[1] + 1))
-    Y2[:, :-1] = fish_source
-    Y = np.vstack((Y1, Y2))
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    callback = partial(visualize, ax=ax)
-
-    reg = DeformableRegistration(**{'X': X, 'Y': Y, 'low_rank': True, 'device': device})
-    reg.register(callback)
-    plt.show()
+    animate = Animator(args, X, Y, title="low-rank deformable")
+    reg = DeformableRegistration(
+        X, Y, low_rank=True, num_eig=40, device=args.device, dtype=args.dtype
+    )
+    reg.register(callback=animate)
+    print(f"{reg.iteration} iterations, kept eigenvalues {reg.S[0]:.3g} ... {reg.S[-1]:.3g}")
+    animate.finish()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
