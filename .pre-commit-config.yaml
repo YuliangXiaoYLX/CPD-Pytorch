@@ -8,6 +8,7 @@ repos:
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
+        args: ["--unsafe"]  # syntax only: mkdocs.yml uses the !ENV tag
       - id: end-of-file-fixer
       - id: mixed-line-ending
       - id: trailing-whitespace
@@ -28,5 +29,6 @@ repos:
     rev: v2.4.3
     hooks:
       - id: codespell
-        args: ["--ignore-words-list", "ans,nd,te"]
+        # The regex skips the notebook's base64-encoded images.
+        args: ["--ignore-words-list", "ans,nd,te", "--ignore-regex", '"image/png": ".*"']
         exclude: "^src/cpd_pytorch/data/"
