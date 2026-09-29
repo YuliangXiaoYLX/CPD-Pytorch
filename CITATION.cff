@@ -10,6 +10,7 @@ authors:
     email: yl.xiao@mail.utoronto.ca
     affiliation: University of Toronto
 version: 1.0.0
+date-released: 2026-09-29
 license: Apache-2.0
 repository-code: "https://github.com/YuliangXiaoYLX/CPD-Pytorch"
 url: "https://cpd-pytorch.readthedocs.io/"

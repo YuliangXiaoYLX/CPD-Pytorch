@@ -4,7 +4,7 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [1.0.0] - Unreleased
+## [1.0.0] - 2026-09-29
 
 First release on PyPI. The code was rewritten; see the
 [migration guide](https://cpd-pytorch.readthedocs.io/en/latest/migration/) for the details.
@@ -85,5 +85,5 @@ First release on PyPI. The code was rewritten; see the
 - Initial PyTorch port of pycpd: rigid, affine, deformable and constrained deformable
   registration.
 
-[1.0.0]: https://github.com/YuliangXiaoYLX/CPD-Pytorch/compare/0fd2ec5...HEAD
+[1.0.0]: https://github.com/YuliangXiaoYLX/CPD-Pytorch/compare/0fd2ec5...v1.0.0
 [0.0.1]: https://github.com/YuliangXiaoYLX/CPD-Pytorch/tree/0fd2ec5
