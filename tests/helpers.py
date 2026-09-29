@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 import numpy as np
 import torch
 
@@ -17,6 +19,11 @@ if torch.cuda.is_available():
     DEVICES.append("cuda")
 if _mps_available():
     DEVICES.append("mps")
+# CPD_PYTORCH_TEST_DEVICES="cpu,cuda" restricts the list, e.g. on CI machines whose GPU
+# is reported as available but cannot run PyTorch's kernels.
+_requested = os.environ.get("CPD_PYTORCH_TEST_DEVICES", "").strip()
+if _requested:
+    DEVICES = [d for d in DEVICES if d in {r.strip() for r in _requested.split(",")}]
 
 #: (device, dtype) combinations supported here (MPS has no float64).
 DEVICE_DTYPES: list[tuple[str, torch.dtype]] = [

@@ -71,6 +71,10 @@ jobs:
           uv pip list
       - name: Test
         run: uv run --no-sync pytest --cov --cov-report=term --durations=10
+        env:
+          # GitHub's macOS runners expose a virtual GPU as MPS, but its Metal compiler rejects
+          # PyTorch's matrix-multiplication kernels; test the CPU only there.
+          CPD_PYTORCH_TEST_DEVICES: ${{ startsWith(matrix.os, 'macos') && 'cpu' || '' }}
 
   build:
     name: Build distributions

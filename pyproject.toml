@@ -131,6 +131,9 @@ filterwarnings = [
   "ignore::DeprecationWarning:torch.*",
   "ignore:.*is deprecated.*:DeprecationWarning:pycpd.*",
   "ignore:Failed to initialize NumPy:UserWarning",
+  # PyTorch 1.x imports pkg_resources, which warns about installed namespace packages.
+  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
+  "ignore:Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning",
 ]
 markers = [
   "slow: long-running tests (deselect with '-m \"not slow\"')",
