@@ -136,6 +136,8 @@ filterwarnings = [
   "ignore:Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning",
   # NumPy 2.0-2.2 with Apple's Accelerate raises these falsely in matrix products (pycpd, tests).
   "ignore:(divide by zero|overflow|invalid value) encountered in matmul:RuntimeWarning",
+  # PyTorch 2.15 warns when it probes the virtual GPU on GitHub's macOS runners.
+  "ignore:Skipping device Apple Paravirtual device:UserWarning",
 ]
 markers = [
   "slow: long-running tests (deselect with '-m \"not slow\"')",

@@ -48,7 +48,8 @@ jobs:
         python: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         include:
           # Oldest supported stack. PyTorch 1.x imports pkg_resources (setuptools < 70).
-          - os: ubuntu-latest
+          # Its libtorch_cpu.so requires an executable stack, which the glibc on Ubuntu 26.04 rejects.
+          - os: ubuntu-24.04
             python: "3.8"
             label: " · oldest dependencies"
             torch: "torch==1.10.2"
